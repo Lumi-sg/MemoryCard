@@ -1,0 +1,11 @@
+.Game {
+	display: flex;
+	justify-content: center;
+	padding: 1rem;
+	font-size: 1.5rem;
+	border: 2px solid white;
+	border-radius: 15px;
+	width: 50vw;
+	height: 75vh;
+	margin-bottom: 5vh;
+}
