@@ -1,8 +1,21 @@
+html,
+body {
+	height: 100%;
+	box-sizing: border-box;
+	background-color: #181818;
+}
+
+body {
+	margin: 0;
+}
+
+* {
+	box-sizing: inherit;
+}
+
 #root {
 	background-color: #181818;
 	color: aliceblue;
-	min-height: 100vh;
-	min-width: 100vw;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

@@ -13,6 +13,7 @@
 	justify-content: center;
 	width: 100%;
 	font-size: 1.5rem;
+	margin-top: 1vh;
+	padding: 1vh;
 	color: white;
-	height: 1vh;
 }
