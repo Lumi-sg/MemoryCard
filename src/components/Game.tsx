@@ -2,34 +2,53 @@ import { useEffect, useState } from "react";
 import "../styles/Game.css";
 
 const Game = () => {
-	const images = import.meta.glob("../assets/*png");
-	const [loadedImages, setLoadedImages] = useState<string[]>([]);
+    const images = import.meta.glob("../assets/*png");
+    const [loadedImages, setLoadedImages] = useState<string[]>([]);
+    const [clickTrigger, setClickTrigger] = useState(false);
+    const filenameArray: string[] = [];
 
-	useEffect(() => {
-		const loadImages = async () => {
-			const imagePaths = Object.keys(images);
+    const handleClick = (filename: string) => {
+        const cleanedfileName = filename.split("/").pop();
+        if (cleanedfileName === undefined) {
+            return;
+        }
+        filenameArray.push(cleanedfileName);
+        console.log(`Clicked card: ${cleanedfileName}`);
+        setClickTrigger((prevTrigger) => !prevTrigger);
+        console.table(filenameArray);
+    };
 
-			const loadedImagePromises = imagePaths.map(async (path) => {
-				const imageModule: any = await images[path]();
-				return imageModule.default;
-			});
+    useEffect(() => {
+        const loadImages = async () => {
+            const imagePaths = Object.keys(images);
 
-			const loadedImages = await Promise.all(loadedImagePromises);
-			setLoadedImages(loadedImages.sort(() => Math.random() - 0.5));
-		};
+            const loadedImagePromises = imagePaths.map(async (path) => {
+                const imageModule: any = await images[path]();
+                return imageModule.default;
+            });
 
-		loadImages();
-	}, []);
+            const loadedImages = await Promise.all(loadedImagePromises);
+            setLoadedImages(loadedImages.sort(() => Math.random() - 0.5));
+        };
 
-	return (
-		<div className="Game">
-			<div className="cardContainer">
-				{loadedImages.map((image, index) => (
-					<img className="card" key={index} src={image} alt={`Image ${index}`} />
-				))}
-			</div>
-		</div>
-	);
+        loadImages();
+    }, [clickTrigger]);
+
+    return (
+        <div className="Game">
+            <div className="cardContainer">
+                {loadedImages.map((image, index) => (
+                    <img
+                        className="card"
+                        key={index}
+                        src={image}
+                        alt={`Image ${index}`}
+                        onClick={() => handleClick(image)}
+                    />
+                ))}
+            </div>
+        </div>
+    );
 };
 
 export default Game;

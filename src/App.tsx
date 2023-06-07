@@ -5,14 +5,14 @@ import Footer from "./components/Footer";
 import Information from "./components/Information";
 import Game from "./components/Game";
 function App() {
-	return (
-		<>
-			<Header />
-			<Information />
-			<Game />
-			<Footer />
-		</>
-	);
+    return (
+        <>
+            <Header />
+            <Information />
+            <Game />
+            <Footer />
+        </>
+    );
 }
 
 export default App;
