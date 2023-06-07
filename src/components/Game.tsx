@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/Game.css";
 
 const Game = () => {
@@ -15,7 +15,7 @@ const Game = () => {
 			});
 
 			const loadedImages = await Promise.all(loadedImagePromises);
-			setLoadedImages(loadedImages);
+			setLoadedImages(loadedImages.sort(() => Math.random() - 0.5));
 		};
 
 		loadImages();
