@@ -7,6 +7,8 @@ const Game = () => {
     const [filenameArray, setFilenameArray] = useState<string[]>([]);
     const [currentScore, setcurrentScore] = useState(0);
     const [bestScore, setBestScore] = useState(0);
+    const [isLost, setIsLost] = useState(false);
+    const [isWon, setIsWon] = useState(false);
 
     const images = import.meta.glob("../assets/*png");
 
@@ -17,9 +19,21 @@ const Game = () => {
         }
         if (filenameArray.includes(cleanedfileName)) {
             handleBestScore();
-            alert("Already clicked");
+            setIsLost(true);
             setcurrentScore(0);
             setFilenameArray([]);
+            setTimeout(() => {
+                setIsLost(false);
+            }, 400);
+            return;
+        }
+
+        if (currentScore + 1 === loadedImages.length) {
+            setIsWon(true);
+            setcurrentScore(0);
+            setTimeout(() => {
+                setIsWon(false);
+            }, 400);
             return;
         }
 
@@ -35,8 +49,8 @@ const Game = () => {
         }
     };
 
+    //load the images to the page
     useEffect(() => {
-        //load the images to the page
         const loadImages = async () => {
             const imagePaths = Object.keys(images);
 
@@ -52,10 +66,14 @@ const Game = () => {
         loadImages();
     }, [clickTrigger]);
 
+    // load the highest score from local storage
     useEffect(() => {
-        // load the highest score from local storage
         setBestScore(parseInt(localStorage.getItem("bestScore") || "0"));
     });
+
+    useEffect(() => {
+        console.table(filenameArray);
+    }, [filenameArray]);
 
     return (
         <>
@@ -63,7 +81,7 @@ const Game = () => {
                 <p>Current score: {currentScore}</p>
                 <p>Best score: {bestScore}</p>
             </div>
-            <div className="Game">
+            <div className={`Game ${isLost ? "lost" : ""} ${isWon ? "won" : ""}`}>
                 <div className="cardContainer">
                     {loadedImages.map((image, index) => (
                         <img
