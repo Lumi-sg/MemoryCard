@@ -6,9 +6,16 @@ const Game = () => {
     const [clickTrigger, setClickTrigger] = useState(false);
     const [filenameArray, setFilenameArray] = useState<string[]>([]);
     const [currentScore, setcurrentScore] = useState(0);
-    const [bestScore, setBestScore] = useState(0);
     const [isLost, setIsLost] = useState(false);
     const [isWon, setIsWon] = useState(false);
+    const [bestScore, setBestScore] = useState(() => {
+        const storedBestScore = localStorage.getItem("bestScore");
+        if (storedBestScore) {
+            return parseInt(storedBestScore);
+        } else {
+            return 0;
+        }
+    });
 
     const images = import.meta.glob("../assets/*png");
 
@@ -20,7 +27,6 @@ const Game = () => {
         if (filenameArray.includes(cleanedfileName)) {
             if (currentScore > bestScore) {
                 setBestScore(currentScore);
-                localStorage.setItem("bestScore", currentScore.toString());
             }
             setIsLost(true);
             setcurrentScore(0);
@@ -31,11 +37,11 @@ const Game = () => {
             return;
         }
         setcurrentScore(currentScore + 1);
+
         if (currentScore + 1 === 12) {
             setIsWon(true);
             setcurrentScore(12);
             setBestScore(12);
-            localStorage.setItem("bestScore", (currentScore + 1).toString()); //this is hacky but I dont know how to fix it otherwise
             setTimeout(() => {
                 setIsWon(false);
                 setcurrentScore(0);
@@ -48,6 +54,18 @@ const Game = () => {
         setClickTrigger((prevTrigger) => !prevTrigger);
     };
 
+    // load the highest score from local storage
+    useEffect(() => {
+        console.log("score retrieved from local storage");
+        setBestScore(parseInt(localStorage.getItem("bestScore") || "0"));
+    }, []);
+
+    //set the best score to local storage
+    useEffect(() => {
+        console.log("best score saved");
+        localStorage.setItem("bestScore", bestScore.toString());
+    }, [bestScore]);
+
     //load the images to the page
     useEffect(() => {
         const loadImages = async () => {
@@ -59,16 +77,12 @@ const Game = () => {
             });
 
             const loadedImages = await Promise.all(loadedImagePromises);
-            setLoadedImages(loadedImages.sort(() => Math.random() - 0.5));
+            setLoadedImages(loadedImages);
+            // setLoadedImages(loadedImages.sort(() => Math.random() - 0.5));
         };
 
         loadImages();
     }, [clickTrigger]);
-
-    // load the highest score from local storage
-    useEffect(() => {
-        setBestScore(parseInt(localStorage.getItem("bestScore") || "0"));
-    }, []);
 
     // useEffect(() => { //for testing
     //     console.table(filenameArray);
