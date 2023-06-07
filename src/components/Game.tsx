@@ -71,9 +71,9 @@ const Game = () => {
         setBestScore(parseInt(localStorage.getItem("bestScore") || "0"));
     });
 
-    useEffect(() => {
-        console.table(filenameArray);
-    }, [filenameArray]);
+    // useEffect(() => { //for testing
+    //     console.table(filenameArray);
+    // }, [filenameArray]);
 
     return (
         <>
@@ -81,6 +81,9 @@ const Game = () => {
                 <p>Current score: {currentScore}</p>
                 <p>Best score: {bestScore}</p>
             </div>
+            {/*
+             We check if the game state is lost / won and append a class name to the div depending on the result
+            */}
             <div className={`Game ${isLost ? "lost" : ""} ${isWon ? "won" : ""}`}>
                 <div className="cardContainer">
                     {loadedImages.map((image, index) => (
