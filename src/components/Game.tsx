@@ -18,7 +18,10 @@ const Game = () => {
             return;
         }
         if (filenameArray.includes(cleanedfileName)) {
-            handleBestScore();
+            if (currentScore > bestScore) {
+                setBestScore(currentScore);
+                localStorage.setItem("bestScore", currentScore.toString());
+            }
             setIsLost(true);
             setcurrentScore(0);
             setFilenameArray([]);
@@ -27,26 +30,22 @@ const Game = () => {
             }, 400);
             return;
         }
-
-        if (currentScore + 1 === loadedImages.length) {
+        setcurrentScore(currentScore + 1);
+        if (currentScore + 1 === 12) {
             setIsWon(true);
-            setcurrentScore(0);
+            setcurrentScore(12);
+            setBestScore(12);
+            localStorage.setItem("bestScore", (currentScore + 1).toString()); //this is hacky but I dont know how to fix it otherwise
             setTimeout(() => {
                 setIsWon(false);
+                setcurrentScore(0);
+                setFilenameArray([]);
             }, 400);
             return;
         }
 
-        setcurrentScore(currentScore + 1);
         setFilenameArray((prevArray) => [...prevArray, cleanedfileName]);
         setClickTrigger((prevTrigger) => !prevTrigger);
-    };
-
-    const handleBestScore = () => {
-        if (currentScore > bestScore) {
-            setBestScore(currentScore);
-            localStorage.setItem("bestScore", currentScore.toString());
-        }
     };
 
     //load the images to the page
@@ -69,7 +68,7 @@ const Game = () => {
     // load the highest score from local storage
     useEffect(() => {
         setBestScore(parseInt(localStorage.getItem("bestScore") || "0"));
-    });
+    }, []);
 
     // useEffect(() => { //for testing
     //     console.table(filenameArray);
@@ -78,8 +77,8 @@ const Game = () => {
     return (
         <>
             <div className="Information">
-                <p>Current score: {currentScore}</p>
-                <p>Best score: {bestScore}</p>
+                <p>Score: {currentScore}</p>
+                <p>High score: {bestScore}</p>
             </div>
             {/*
              We check if the game state is lost / won and append a class name to the div depending on the result
