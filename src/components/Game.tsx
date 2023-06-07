@@ -77,8 +77,7 @@ const Game = () => {
             });
 
             const loadedImages = await Promise.all(loadedImagePromises);
-            setLoadedImages(loadedImages);
-            // setLoadedImages(loadedImages.sort(() => Math.random() - 0.5));
+            setLoadedImages(loadedImages.sort(() => Math.random() - 0.5));
         };
 
         loadImages();
