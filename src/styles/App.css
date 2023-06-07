@@ -2,7 +2,7 @@ html,
 body {
 	height: 100%;
 	box-sizing: border-box;
-	background-color: #181818;
+	background-color: #10100f;
 }
 
 body {
@@ -14,7 +14,6 @@ body {
 }
 
 #root {
-	background-color: #181818;
 	color: aliceblue;
 	display: flex;
 	flex-direction: column;
