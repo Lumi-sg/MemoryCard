@@ -5,17 +5,15 @@ const Game = () => {
     const images = import.meta.glob("../assets/*png");
     const [loadedImages, setLoadedImages] = useState<string[]>([]);
     const [clickTrigger, setClickTrigger] = useState(false);
-    const filenameArray: string[] = [];
+    const [filenameArray, setFilenameArray] = useState<string[]>([]);
 
     const handleClick = (filename: string) => {
         const cleanedfileName = filename.split("/").pop();
         if (cleanedfileName === undefined) {
             return;
         }
-        filenameArray.push(cleanedfileName);
-        console.log(`Clicked card: ${cleanedfileName}`);
+        setFilenameArray((prevArray) => [...prevArray, cleanedfileName]);
         setClickTrigger((prevTrigger) => !prevTrigger);
-        console.table(filenameArray);
     };
 
     useEffect(() => {
@@ -33,6 +31,10 @@ const Game = () => {
 
         loadImages();
     }, [clickTrigger]);
+
+    useEffect(() => {
+        console.table(filenameArray);
+    }, [filenameArray]);
 
     return (
         <div className="Game">
